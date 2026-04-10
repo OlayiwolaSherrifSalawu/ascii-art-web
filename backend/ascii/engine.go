@@ -10,10 +10,11 @@ type Config struct {
 	Banner      string
 	Color       string
 	ColorText   string
+	Reset       string
 	ColorWord   [][]bool
 }
 
-func Render(args *Config, file []string, color, reset string) (string, error) {
+func Render(args *Config, file []string) (string, error) {
 	// to avoid memory overhead using a string builder would be better
 	var sb strings.Builder
 
@@ -29,9 +30,9 @@ func Render(args *Config, file []string, color, reset string) (string, error) {
 				}
 				vals := (int(val[k]-32) * 9) + j
 				if args.ColorWord[i][k] {
-					sb.WriteString(color)
+					sb.WriteString(args.Color)
 					sb.WriteString(file[vals])
-					sb.WriteString(reset)
+					sb.WriteString(args.Reset)
 				} else {
 					sb.WriteString(file[vals])
 				}
