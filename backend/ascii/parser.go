@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func LoadBanner(args Utils) ([]string, error) {
+func (a asciiService) LoadBanner(args Utils) ([]string, error) {
 	var file []byte
 	var err error
 	hasTxtSuffix := strings.HasSuffix(args.Banner, ".txt")
