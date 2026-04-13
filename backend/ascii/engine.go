@@ -5,19 +5,21 @@ import (
 )
 
 type Config struct {
-	OutputFile  string
 	InputString []string
-	Banner      string
 	Color       string
-	ColorText   string
 	Reset       string
 	ColorWord   [][]bool
+}
+type Utils struct {
+	Banner string
 }
 
 func Render(args *Config, file []string) (string, error) {
 	// to avoid memory overhead using a string builder would be better
 	var sb strings.Builder
-
+	if args.ColorWord == nil {
+		return "", NOCOLORWORD
+	}
 	for i, val := range args.InputString {
 		if val == "" {
 			sb.WriteString("\n")
@@ -29,7 +31,7 @@ func Render(args *Config, file []string) (string, error) {
 					return "", INVALID_CHAR_VAl
 				}
 				vals := (int(val[k]-32) * 9) + j
-				if args.ColorWord[i][k] {
+				if i < len(args.ColorWord) && k < len(args.ColorWord[i]) && args.ColorWord[i][k] {
 					sb.WriteString(args.Color)
 					sb.WriteString(file[vals])
 					sb.WriteString(args.Reset)
@@ -44,3 +46,5 @@ func Render(args *Config, file []string) (string, error) {
 	return sb.String(), nil
 
 }
+
+func isColored()

@@ -6,26 +6,19 @@ import (
 	"strings"
 )
 
-func LoadBanner(Banner string) ([]byte, error) {
+func LoadBanner(args Utils) ([]string, error) {
 	var file []byte
 	var err error
-	if strings.HasSuffix(Banner, ".txt") {
-		file, err = os.ReadFile(filepath.Join("fonts/", Banner))
-		if err != nil {
-			return nil, err
-		}
-		if len(file) <= 1 {
-			return nil, EMPTY_FILE
-		}
-
-	} else {
-		file, err = os.ReadFile(filepath.Join("fonts/", Banner+".txt"))
-		if err != nil {
-			return nil, err
-		}
-		if len(file) <= 1 {
-			return nil, EMPTY_FILE
-		}
+	hasTxtSuffix := strings.HasSuffix(args.Banner, ".txt")
+	if !hasTxtSuffix {
+		args.Banner = args.Banner + ".txt"
 	}
-	return file, nil
+	file, err = os.ReadFile(filepath.Join("fonts/", args.Banner))
+	if err != nil {
+		return nil, err
+	}
+	if len(file) <= 1 {
+		return nil, EMPTY_FILE
+	}
+	return strings.Split(string(file), "\n"), nil
 }

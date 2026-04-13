@@ -9,4 +9,5 @@ func (e ConstantError) Error() string {
 const (
 	INVALID_CHAR_VAl = ConstantError("Non Printable character detected")
 	EMPTY_FILE       = ConstantError("font file is empty")
+	NOCOLORWORD      = ConstantError("cannot print empty color word ")
 )

@@ -6,8 +6,11 @@ import (
 
 func GetIndex(text []string, colorText string) [][]bool {
 	newTxt := text
-	newColorTxt := strings.Split(colorText, "\\n")
+	if newTxt == nil {
+		return nil
+	}
 	colored2Array := make([][]bool, len(newTxt))
+	newColorTxt := strings.Split(colorText, "\\n")
 	for i := range newTxt {
 		colored2Array[i] = make([]bool, len(newTxt[i]))
 	}
