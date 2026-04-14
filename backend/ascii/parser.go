@@ -6,14 +6,14 @@ import (
 	"strings"
 )
 
-func (a asciiService) LoadBanner(args Utils) ([]string, error) {
+func (a asciiService) LoadBanner(Banner string) ([]string, error) {
 	var file []byte
 	var err error
-	hasTxtSuffix := strings.HasSuffix(args.Banner, ".txt")
+	hasTxtSuffix := strings.HasSuffix(Banner, ".txt")
 	if !hasTxtSuffix {
-		args.Banner = args.Banner + ".txt"
+		Banner = Banner + ".txt"
 	}
-	file, err = os.ReadFile(filepath.Join("fonts/", args.Banner))
+	file, err = os.ReadFile(filepath.Join(a.fontPath, Banner))
 	if err != nil {
 		return nil, err
 	}

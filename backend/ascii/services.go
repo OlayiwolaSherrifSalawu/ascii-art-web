@@ -2,7 +2,6 @@ package ascii
 
 type AsciiService interface {
 	Render(args *Config, file []string) (string, error)
-	LoadBanner(args Utils) ([]string, error)
 }
 
 type asciiService struct {
