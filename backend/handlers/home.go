@@ -7,10 +7,10 @@ import (
 )
 
 type Handler struct {
-	asciiService ascii.AsciiService
+	asciiService ascii.AsciiServiceInt
 }
 
-func NewAsciiHandler(asciiService ascii.AsciiService) *Handler {
+func NewAsciiHandler(asciiService ascii.AsciiServiceInt) *Handler {
 	return &Handler{asciiService: asciiService}
 }
 
