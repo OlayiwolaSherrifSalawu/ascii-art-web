@@ -7,7 +7,7 @@ import (
 )
 
 type AsciiServiceInt interface {
-	Render(args *Config, file []string) (string, error)
+	GenerateAscii(text, banner string) (string, error)
 }
 
 type asciiService struct {

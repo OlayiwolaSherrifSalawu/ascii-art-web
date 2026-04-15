@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/OlayiwolaSherrifSalawu/ascii-art-web.git/backend/ascii"
@@ -8,6 +9,8 @@ import (
 
 type Handler struct {
 	asciiService ascii.AsciiServiceInt
+	errorLogger  log.Logger
+	infoLogger   log.Logger
 }
 
 func NewAsciiHandler(asciiService ascii.AsciiServiceInt) *Handler {
