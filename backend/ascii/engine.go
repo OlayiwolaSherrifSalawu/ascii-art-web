@@ -4,17 +4,14 @@ import (
 	"strings"
 )
 
-type Config struct {
+type config struct {
 	InputString []string
 	Color       string
 	Reset       string
 	ColorWord   [][]bool
 }
-type Utils struct {
-	Banner string
-}
 
-func (a *asciiService) Render(args *Config, file []string) (string, error) {
+func (a asciiService) Render(args *config, file []string) (string, error) {
 	// to avoid memory overhead using a string builder would be better
 	var sb strings.Builder
 	if args.ColorWord == nil {

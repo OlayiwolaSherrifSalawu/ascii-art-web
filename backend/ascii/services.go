@@ -33,7 +33,7 @@ func (a *asciiService) GenerateAscii(text, banner string) (string, error) {
 		return "", CANT_READ_BANNER
 	}
 	colorWord := utils.GetIndex(inputSlice, "")
-	cfg := &Config{
+	cfg := &config{
 		Color:       "",
 		ColorWord:   colorWord,
 		InputString: inputSlice,
