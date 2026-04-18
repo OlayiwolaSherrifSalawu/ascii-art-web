@@ -1,0 +1,21 @@
+{{template "base"}} {{define "title" }}<title>TypAscii</title>{{end}} {{define
+"main"}}
+
+<form>
+  <textarea
+    name="text"
+    id="text"
+    hx-post="/ascii-art"
+    hx-trigger="keyup changed delay:200ms"
+    hx-target="innerhtml"
+    hx-swap="#result"
+  ></textarea>
+
+  <select name="banner" id="banner">
+    <option value="standard">Standard</option>
+    <option value="thinkertoy">Thinker-Toy</option>
+    <option value="shadow">Shadow</option>
+  </select>
+</form>
+<div id="result">{{*/result is here/*}}</div>
+{{end}}

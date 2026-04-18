@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"html/template"
 	"net/http"
 	"strings"
 
@@ -10,38 +10,55 @@ import (
 
 type Handler struct {
 	asciiService ascii.AsciiServiceInt
-	Banner       string
-	Text         string
-	Result       string
+	templates    *template.Template
 }
 
-func NewAsciiHandler(asciiService ascii.AsciiServiceInt) *Handler {
-	return &Handler{asciiService: asciiService}
+func NewAsciiHandler(asciiService ascii.AsciiServiceInt, templates *template.Template) *Handler {
+	return &Handler{
+		asciiService: asciiService,
+		templates:    templates,
+	}
 }
 
 func (h *Handler) ServerAscii(w http.ResponseWriter, r *http.Request) {
-	var err error
 	if r.Method != http.MethodPost {
+		h.clientError(w, http.StatusMethodNotAllowed)
+		return
+	}
+	Text := r.FormValue("text")
+	Banner := r.FormValue("banner")
+	if Banner == "" || Text == "" {
 		h.clientError(w, http.StatusBadRequest)
 		return
 	}
-	h.Text = r.FormValue("text")
-	h.Banner = r.FormValue("banner")
-	if h.Banner == "" || h.Text == "" {
-		h.clientError(w, http.StatusBadRequest)
-		return
-	}
-	services := ascii.NewAsciiService("ui/static/fonts")
-	h.Text = strings.ReplaceAll(h.Text, "\r\n", "\n")
-	h.Result, err = services.GenerateAscii(h.Result, h.Banner)
+
+	Text = strings.ReplaceAll(Text, "\r\n", "\n")
+	Result, err := h.asciiService.GenerateAscii(Text, Banner)
 	if err != nil {
 		h.serverError(w, err)
 		return
 	}
-	w.Header().Set("Content-type", "text/html")
-	fmt.Fprintf(w, "%s", h.Result)
+
+	// fmt.Fprintf(w, "%s", Result)
+	err = h.templates.ExecuteTemplate(w, "result", Result)
+	if err != nil {
+		h.serverError(w, err)
+		return
+	}
 }
 
 func (h *Handler) ServeHome(w http.ResponseWriter, r *http.Request) {
-
+	if r.URL.Path != "/" {
+		h.notFound(w)
+		return
+	}
+	if r.Method != http.MethodGet {
+		h.clientError(w, http.StatusMethodNotAllowed)
+		return
+	}
+	err := h.templates.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		h.serverError(w, err)
+		return
+	}
 }
