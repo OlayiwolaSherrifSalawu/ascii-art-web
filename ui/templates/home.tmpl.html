@@ -1,8 +1,5 @@
-{{template "base" .}}
-
-
-{{define "title" }}<title>TypAscii</title>{{end}} 
-{{define "main"}}
+{{template "base" .}} {{define "title" }}<title>TypAscii</title>{{end}} {{define
+"main"}}
 
 <form>
   <textarea
@@ -12,7 +9,7 @@
     hx-trigger="keyup changed delay:0.1ms"
     hx-target="#result"
     hx-swap="innerHTML"
-  hx-include="closest form"
+    hx-include="closest form"
   ></textarea>
 
   <select name="banner" id="banner">
@@ -20,6 +17,13 @@
     <option value="thinkertoy">Thinker-Toy</option>
     <option value="shadow">Shadow</option>
   </select>
+  <button
+    hx-post="/ascii-art/download"
+    hx-swap="none"
+    hx-include="closest-form"
+  >
+  Download ascii-art
+</button>
 </form>
 <div id="result">{{/*result is here*/}}</div>
 {{end}}
