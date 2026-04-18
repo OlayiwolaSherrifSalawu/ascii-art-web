@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"html/template"
 	"net/http"
 	"strings"
@@ -27,24 +28,33 @@ func (h *Handler) ServerAscii(w http.ResponseWriter, r *http.Request) {
 	}
 	Text := r.FormValue("text")
 	Banner := r.FormValue("banner")
-	if Banner == "" || Text == "" {
+	if Banner == "" {
 		h.clientError(w, http.StatusBadRequest)
 		return
 	}
 
 	Text = strings.ReplaceAll(Text, "\r\n", "\n")
+	if Text == "" {
+		h.templates.ExecuteTemplate(w, "result", "")
+		return
+	}
 	Result, err := h.asciiService.GenerateAscii(Text, Banner)
+	if errors.Is(err, ascii.INVALID_CHAR_VAl) {
+		h.templates.ExecuteTemplate(w, "error", err)
+	}
 	if err != nil {
-		h.serverError(w, err)
+		h.clientError(w, http.StatusBadRequest)
 		return
 	}
 
 	// fmt.Fprintf(w, "%s", Result)
+
 	err = h.templates.ExecuteTemplate(w, "result", Result)
 	if err != nil {
 		h.serverError(w, err)
 		return
 	}
+
 }
 
 func (h *Handler) ServeHome(w http.ResponseWriter, r *http.Request) {

@@ -23,11 +23,11 @@ func (a asciiService) Render(args *config, file []string) (string, error) {
 			continue
 		}
 		for j := 1; j <= 8; j++ {
-			for k := 0; k < len(val); k++ {
-				if !(val[k] >= 32 && val[k] <= 126) {
+			for k, ch := range val {
+				if !(ch >= 32 && ch <= 126) {
 					return "", INVALID_CHAR_VAl
 				}
-				vals := (int(val[k]-32) * 9) + j
+				vals := (int(ch-32) * 9) + j
 				if i < len(args.ColorWord) && k < len(args.ColorWord[i]) && args.ColorWord[i][k] {
 					sb.WriteString(args.Color)
 					sb.WriteString(file[vals])

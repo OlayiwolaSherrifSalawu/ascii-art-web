@@ -1,4 +1,4 @@
-package web
+package main
 
 import (
 	"flag"
@@ -18,9 +18,14 @@ type config struct {
 }
 
 func main() {
-	templates, err := template.ParseGlob("ui/templates/**/*.html")
+	templates, err := template.ParseGlob("ui/templates/*.tmpl")
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
+		return
+	}
+	templates, err = templates.ParseGlob("ui/templates/partials/*.tmpl")
+	if err != nil {
+		log.Fatal(err)
 		return
 	}
 	cfg := new(config)
@@ -37,6 +42,7 @@ func main() {
 
 	// NewServerMux for cleaner routing
 	mux := http.NewServeMux()
+	mux.HandleFunc("GET /", app.ServeHome)
 	mux.HandleFunc("POST /ascii-art", app.ServerAscii)
 	cfg.infologger.Printf("started server at port %s\n", cfg.port)
 	err = http.ListenAndServe(cfg.port, mux)
