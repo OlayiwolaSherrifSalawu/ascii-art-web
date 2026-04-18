@@ -5,6 +5,18 @@ import (
 	"net/http"
 )
 
+type constError string
+
+func (e constError) Error() string {
+	return string(e)
+}
+
+const (
+	BAD_REQUEST  = constError("BAD REQUEST")
+	INVALID_CHAR = constError("INVALID CHARACTER DETECTED")
+	EMPTY_STRING = constError("EMPTY STRING")
+)
+
 func (h *Handler) clientError(w http.ResponseWriter, err int) {
 	http.Error(w, http.StatusText(err), err)
 }

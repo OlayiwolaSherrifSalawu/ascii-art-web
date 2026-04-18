@@ -42,8 +42,10 @@ func main() {
 
 	// NewServerMux for cleaner routing
 	mux := http.NewServeMux()
+
 	mux.HandleFunc("GET /", app.ServeHome)
 	mux.HandleFunc("POST /ascii-art", app.ServerAscii)
+	mux.HandleFunc("POST /ascii-art/download", app.DownloadHandler)
 	cfg.infologger.Printf("started server at port %s\n", cfg.port)
 	err = http.ListenAndServe(cfg.port, mux)
 	cfg.errorlogger.Println(err)

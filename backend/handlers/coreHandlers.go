@@ -4,7 +4,6 @@ import (
 	"errors"
 	"html/template"
 	"net/http"
-	"strings"
 
 	"github.com/OlayiwolaSherrifSalawu/ascii-art-web.git/backend/ascii"
 )
@@ -26,35 +25,24 @@ func (h *Handler) ServerAscii(w http.ResponseWriter, r *http.Request) {
 		h.clientError(w, http.StatusMethodNotAllowed)
 		return
 	}
-	Text := r.FormValue("text")
-	Banner := r.FormValue("banner")
-	if Banner == "" {
+	Result, err := h.generateArt(r)
+	if errors.Is(err, BAD_REQUEST) {
 		h.clientError(w, http.StatusBadRequest)
 		return
 	}
-
-	Text = strings.ReplaceAll(Text, "\r\n", "\n")
-	if Text == "" {
-		h.templates.ExecuteTemplate(w, "result", "")
-		return
-	}
-	Result, err := h.asciiService.GenerateAscii(Text, Banner)
-	if errors.Is(err, ascii.INVALID_CHAR_VAl) {
-		h.templates.ExecuteTemplate(w, "error", err)
-	}
-	if err != nil {
+	if errors.Is(err, INVALID_CHAR) {
+		h.templates.ExecuteTemplate(w,"error",err)
 		h.clientError(w, http.StatusBadRequest)
 		return
 	}
-
-	// fmt.Fprintf(w, "%s", Result)
-
+	if errors.Is(err,EMPTY_STRING){
+		h.templates.ExecuteTemplate(w,"result","")
+	}
 	err = h.templates.ExecuteTemplate(w, "result", Result)
 	if err != nil {
 		h.serverError(w, err)
 		return
 	}
-
 }
 
 func (h *Handler) ServeHome(w http.ResponseWriter, r *http.Request) {
