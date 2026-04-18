@@ -31,12 +31,15 @@ func (h *Handler) ServerAscii(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if errors.Is(err, INVALID_CHAR) {
-		h.templates.ExecuteTemplate(w,"error",err)
-		h.clientError(w, http.StatusBadRequest)
+		h.templates.ExecuteTemplate(w, "error", err)
 		return
 	}
-	if errors.Is(err,EMPTY_STRING){
-		h.templates.ExecuteTemplate(w,"result","")
+	if errors.Is(err, EMPTY_STRING) {
+		h.templates.ExecuteTemplate(w, "result", "")
+		return	
+	}
+	if err !=nil{
+
 	}
 	err = h.templates.ExecuteTemplate(w, "result", Result)
 	if err != nil {

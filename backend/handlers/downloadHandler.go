@@ -2,23 +2,24 @@ package handlers
 
 import (
 	"errors"
+	"log"
 	"net/http"
 )
 
 func (h *Handler) DownloadHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/ascii-art/download" {
-		h.notFound(w)
-		return
-	}
+	log.Println("DownloadHandler called")
 	Result, err := h.generateArt(r)
 	if errors.Is(err, INVALID_CHAR) {
-		h.templates.ExecuteTemplate(w, "error", err)
 		h.clientError(w, http.StatusBadRequest)
 		return
 	}
-	fileName := "ascii-art"
+	if err != nil {
+		h.clientError(w, http.StatusBadRequest)
+		return
+	}
+	fileName := "ascii-art.txt"
 	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
-	w.Header().Set("Content-Type", "application/txt")
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+
 	w.Write([]byte(Result))
-	http.ServeFile(w, r, fileName)
 }
