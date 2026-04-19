@@ -1,12 +1,13 @@
 {{template "base" .}} {{define "title" }}<title>TypAscii</title>{{end}} {{define
 "main"}}
 
-<form>
+  
+<form method="POST" action="/ascii-art">
   <textarea
     name="text"
     id="text"
     hx-post="/ascii-art"
-    hx-trigger="keyup changed delay:0.1ms"
+    hx-trigger="keyup changed delay:200ms"
     hx-target="#result"
     hx-swap="innerHTML"
     hx-include="closest form"
@@ -17,13 +18,11 @@
     <option value="thinkertoy">Thinker-Toy</option>
     <option value="shadow">Shadow</option>
   </select>
-  <button
-    hx-post="/ascii-art/download"
-    hx-swap="none"
-    hx-include="closest form"
-  >
-  Download ascii-art
-</button>
 </form>
+<form method="POST" action="/ascii-art/download">
+      <input type="hidden" name="text" id="download-text"/>
+      <input type="hidden" name="banner" id="download-banner" />
+      <button type="submit" id="download-btn">Download ascii-art</button>
+    </form>
 <div id="result">{{/*result is here*/}}</div>
 {{end}}
