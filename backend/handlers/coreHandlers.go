@@ -26,20 +26,21 @@ func (h *Handler) ServerAscii(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	Result, err := h.generateArt(r)
-	if errors.Is(err, BAD_REQUEST) {
-		h.clientError(w, http.StatusBadRequest)
-		return
-	}
-	if errors.Is(err, INVALID_CHAR) {
-		h.templates.ExecuteTemplate(w, "error", err)
-		return
-	}
-	if errors.Is(err, EMPTY_STRING) {
-		h.templates.ExecuteTemplate(w, "result", "")
-		return	
-	}
-	if err !=nil{
 
+	if err != nil {
+		switch {
+		case errors.Is(err, INVALID_BANNER):
+			h.templates.ExecuteTemplate(w, "error", INVALID_BANNER)
+		case errors.Is(err, BAD_REQUEST):
+			h.clientError(w, http.StatusBadRequest)
+		case errors.Is(err, INVALID_CHAR):
+			h.templates.ExecuteTemplate(w, "error", err)
+		case errors.Is(err, EMPTY_STRING):
+			h.templates.ExecuteTemplate(w, "result", "")
+		default:
+			h.templates.ExecuteTemplate(w, "error", err)
+		}
+		return
 	}
 	err = h.templates.ExecuteTemplate(w, "result", Result)
 	if err != nil {
