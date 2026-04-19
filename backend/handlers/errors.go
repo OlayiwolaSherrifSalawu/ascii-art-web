@@ -12,9 +12,10 @@ func (e constError) Error() string {
 }
 
 const (
-	BAD_REQUEST  = constError("BAD REQUEST")
-	INVALID_CHAR = constError("INVALID CHARACTER DETECTED")
-	EMPTY_STRING = constError("EMPTY STRING")
+	BAD_REQUEST    = constError("BAD REQUEST")
+	INVALID_CHAR   = constError("INVALID CHARACTER DETECTED")
+	EMPTY_STRING   = constError("EMPTY STRING")
+	INVALID_BANNER = constError("CANT PRINT BANNER SELECT ANOTHER PLS")
 )
 
 func (h *Handler) clientError(w http.ResponseWriter, err int) {

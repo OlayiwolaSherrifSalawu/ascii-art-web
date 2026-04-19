@@ -27,3 +27,7 @@ func (a asciiService) LoadBanner(Banner string) ([]string, error) {
 	a.cache[Banner] = strings.Split(string(file), "\n")
 	return strings.Split(string(file), "\n"), nil
 }
+
+func (a asciiService) ValidBanner(name string) bool {
+	return a.validBanner[name]
+}

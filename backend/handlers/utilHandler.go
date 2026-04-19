@@ -14,17 +14,20 @@ func (h *Handler) generateArt(r *http.Request) (string, error) {
 	if Banner == "" {
 		return "", BAD_REQUEST
 	}
-
+	isValidBanner := h.asciiService.ValidBanner(Banner)
+	if !isValidBanner {
+		return "", INVALID_BANNER
+	}
 	Text = strings.ReplaceAll(Text, "\r\n", "\n")
 	if Text == "" {
 		return "", EMPTY_STRING
 	}
 	Result, err := h.asciiService.GenerateAscii(Text, Banner)
-	if errors.Is(err, ascii.INVALID_CHAR_VAl) {
-		return "", INVALID_CHAR
-	}
 	if err != nil {
-		return "", BAD_REQUEST
+		if errors.Is(err, ascii.INVALID_CHAR_VAl) {
+			return "", INVALID_CHAR
+		}
+		return "", err
 	}
 	return Result, nil
 }

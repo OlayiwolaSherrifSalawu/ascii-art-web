@@ -24,5 +24,10 @@
       <input type="hidden" name="banner" id="download-banner" />
       <button type="submit" id="download-btn">Download ascii-art</button>
     </form>
+    
 <div id="result">{{/*result is here*/}}</div>
+<button onclick="  var pre = document.querySelector('pre');
+if (pre) navigator.clipboard.writeText(document.querySelector('pre').innerText)">
+    Copy
+</button>
 {{end}}

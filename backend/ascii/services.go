@@ -1,6 +1,8 @@
 package ascii
 
 import (
+	"log"
+	"os"
 	"strings"
 
 	"github.com/OlayiwolaSherrifSalawu/ascii-art-web.git/backend/ascii/utils"
@@ -8,17 +10,31 @@ import (
 
 type AsciiServiceInt interface {
 	GenerateAscii(text, banner string) (string, error)
+	ValidBanner(name string) bool
 }
 
 type asciiService struct {
-	fontPath string
-	cache    map[string][]string
+	fontPath    string
+	cache       map[string][]string
+	validBanner map[string]bool
 }
 
 func NewAsciiService(fontPaths string) AsciiServiceInt {
+	valid := make(map[string]bool)
+	banners, err := os.ReadDir(fontPaths)
+	if err != nil {
+		log.Fatal("could not read directory", err)
+	}
+	for _, banner := range banners {
+		if strings.HasSuffix(banner.Name(), ".txt") {
+			name := strings.TrimSuffix(banner.Name(), ".txt")
+			valid[name] = true
+		}
+	}
 	return &asciiService{
-		fontPath: fontPaths,
-		cache:    make(map[string][]string),
+		fontPath:    fontPaths,
+		cache:       make(map[string][]string),
+		validBanner: valid,
 	}
 }
 
@@ -41,3 +57,4 @@ func (a *asciiService) GenerateAscii(text, banner string) (string, error) {
 	}
 	return a.Render(cfg, bannerSlices)
 }
+
