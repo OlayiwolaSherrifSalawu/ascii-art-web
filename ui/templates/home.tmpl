@@ -1,33 +1,150 @@
-{{template "base" .}} {{define "title" }}<title>TypAscii</title>{{end}} {{define
-"main"}}
+{{template "base" .}}
+{{define "title"}}<title>TypAscii — Text to ASCII Art</title>{{end}}
+{{define "main"}}
 
-  
-<form method="POST" action="/ascii-art">
-  <textarea
-    name="text"
-    id="text"
-    hx-post="/ascii-art"
-    hx-trigger="keyup changed delay:200ms"
-    hx-target="#result"
-    hx-swap="innerHTML"
-    hx-include="closest form"
-  ></textarea>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__left">
+    <span class="hero__tag">ASCII Art Generator</span>
+    <h1 class="hero__title">
+      TYPE.<br/>
+      <span>MAKE ART.</span>
+    </h1>
+    <p class="hero__desc">
+      Turn any word into bold ASCII art in under a second.
+      Choose your font style, copy the output, and drop it anywhere —
+      READMEs, terminals, bios, posters.
+    </p>
+    <div class="hero__ctas">
+      <a href="/generate" class="btn btn-accent">Start creating →</a>
+      <a href="#how" class="btn btn-ghost">How it works</a>
+    </div>
+    <div class="hero__metrics">
+      <div class="metric">
+        <div class="metric__n">3+</div>
+        <div class="metric__l">Font styles</div>
+      </div>
+      <div class="metric">
+        <div class="metric__n">∞</div>
+        <div class="metric__l">Combinations</div>
+      </div>
+      <div class="metric">
+        <div class="metric__n">&lt;1s</div>
+        <div class="metric__l">Generation</div>
+      </div>
+    </div>
+  </div>
 
-  <select name="banner" id="banner">
-    <option value="standard">Standard</option>
-    <option value="thinkertoy">Thinker-Toy</option>
-    <option value="shadow">Shadow</option>
-  </select>
-</form>
-<form method="POST" action="/ascii-art/download">
-      <input type="hidden" name="text" id="download-text"/>
-      <input type="hidden" name="banner" id="download-banner" />
-      <button type="submit" id="download-btn">Download ascii-art</button>
-    </form>
-    
-<div id="result">{{/*result is here*/}}</div>
-<button onclick="  var pre = document.querySelector('pre');
-if (pre) navigator.clipboard.writeText(document.querySelector('pre').innerText)">
-    Copy
-</button>
+  <div class="hero__right">
+    <div class="terminal">
+      <div class="terminal__bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="terminal__label">typasc.ii — standard</span>
+      </div>
+      <div class="terminal__body">
+        <pre class="terminal__ascii"> _   _  ___  _     _      ___
+| | | |/ _ \| |   | |    / _ \
+| |_| | | | | |   | |   | | | |
+|  _  | |_| | |___| |___| |_| |
+|_| |_|\___/|_____|_____|\___/ </pre>
+        <div class="terminal__prompt">
+          <span class="prompt-sym">$</span>
+          <span class="prompt-txt">typasc --font standard "hello"</span>
+          <span class="cursor"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCROLLING TICKER -->
+<div class="ticker">
+  <div class="ticker__inner">
+    <span class="ticker__item ticker__item--hi">Standard</span>
+    <span class="ticker__item">Shadow</span>
+    <span class="ticker__item ticker__item--hi">Thinker-Toy</span>
+    <span class="ticker__item">Block</span>
+    <span class="ticker__item ticker__item--hi">Slant</span>
+    <span class="ticker__item">Script</span>
+    <span class="ticker__item ticker__item--hi">3D</span>
+    <span class="ticker__item">Banner</span>
+    <span class="ticker__item ticker__item--hi">Gothic</span>
+    <span class="ticker__item">Doom</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker__item ticker__item--hi">Standard</span>
+    <span class="ticker__item">Shadow</span>
+    <span class="ticker__item ticker__item--hi">Thinker-Toy</span>
+    <span class="ticker__item">Block</span>
+    <span class="ticker__item ticker__item--hi">Slant</span>
+    <span class="ticker__item">Script</span>
+    <span class="ticker__item ticker__item--hi">3D</span>
+    <span class="ticker__item">Banner</span>
+    <span class="ticker__item ticker__item--hi">Gothic</span>
+    <span class="ticker__item">Doom</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <span class="section__eyebrow">How it works</span>
+  <h2 class="section__title">Three steps.<br/>Zero friction.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step__n">01</div>
+      <h3 class="step__title">Type your text</h3>
+      <p class="step__desc">Enter any word, phrase, or name. Standard printable ASCII characters supported.</p>
+    </div>
+    <div class="step">
+      <div class="step__n">02</div>
+      <h3 class="step__title">Pick a font</h3>
+      <p class="step__desc">Choose from a growing library of styles. Output updates live as you type — no button needed.</p>
+    </div>
+    <div class="step">
+      <div class="step__n">03</div>
+      <h3 class="step__title">Copy or export</h3>
+      <p class="step__desc">One-click copy to clipboard or download as a <code>.txt</code> file.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" style="border-bottom:1px solid var(--line);">
+  <span class="section__eyebrow">Built for speed</span>
+  <h2 class="section__title">Everything you need.<br/>Nothing you don't.</h2>
+  <div class="fcards">
+    <div class="fcard">
+      <div class="fcard__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      </div>
+      <h3 class="fcard__t">Live preview</h3>
+      <p class="fcard__d">Your ASCII art updates as you type, powered by HTMX — no page reload, no delay.</p>
+    </div>
+    <div class="fcard">
+      <div class="fcard__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <h3 class="fcard__t">Export as .txt</h3>
+      <p class="fcard__d">Download your creation as a plain text file to use in any project.</p>
+    </div>
+    <div class="fcard">
+      <div class="fcard__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </div>
+      <h3 class="fcard__t">One-click copy</h3>
+      <p class="fcard__d">Copy the raw ASCII output straight to your clipboard, ready to paste anywhere.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div>
+    <div class="cta-strip__hl">Ready to <span>make</span><br/>something?</div>
+    <p class="cta-strip__sub">Open the generator and turn any word into ASCII art in under a second.</p>
+  </div>
+  <a href="/generate" class="btn btn-ring" style="font-size:1rem; height:48px; padding:0 28px;">Open generator →</a>
+</div>
+
 {{end}}

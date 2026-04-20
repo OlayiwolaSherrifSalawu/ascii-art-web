@@ -18,6 +18,7 @@ type config struct {
 }
 
 func main() {
+	// Parse all templates — base pages and partials
 	templates, err := template.ParseGlob("ui/templates/*.tmpl")
 	if err != nil {
 		log.Fatal(err)
@@ -28,24 +29,34 @@ func main() {
 		log.Fatal(err)
 		return
 	}
+
 	cfg := new(config)
-	// create a new services
+
+	// Create ASCII service (reads font files from the given directory)
 	srv := ascii.NewAsciiService("ui/static/fonts")
-	// create a new app handler using the ascii services that was created
+
+	// Create handler, injecting the service and templates
 	app := handlers.NewAsciiHandler(srv, templates)
 
 	flag.StringVar(&cfg.port, "port", ":8080", "HTTP PORT ADDRESS")
 	flag.Parse()
-	// create a new logger to log errors and infos  on the terminal
+
 	cfg.infologger = *log.New(os.Stdout, "INFO \t", log.Ldate|log.Ltime)
 	cfg.errorlogger = *log.New(os.Stderr, "ERROR \t", log.Ldate|log.Ltime)
 
-	// NewServerMux for cleaner routing
 	mux := http.NewServeMux()
 
+	// Static assets
+	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("ui/static"))))
+
+	// Pages
 	mux.HandleFunc("GET /", app.ServeHome)
+	mux.HandleFunc("GET /generate", app.ServeGenerate)
+
+	// API / actions
 	mux.HandleFunc("POST /ascii-art", app.ServerAscii)
 	mux.HandleFunc("POST /ascii-art/download", app.DownloadHandler)
+
 	cfg.infologger.Printf("started server at port %s\n", cfg.port)
 	err = http.ListenAndServe(cfg.port, mux)
 	cfg.errorlogger.Println(err)
